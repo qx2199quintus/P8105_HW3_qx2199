@@ -135,10 +135,20 @@ pivot_wider(
 )
 ```
 
-*The person tends to be less active on the Saturday in week 4 and week 5. Alos, the person tends to have a relative stable activity exercise during the weendays but a relatevely higher activity exercise  on Fridays. 
+*The person tends to be less active on the Saturday in week 4 and week 5. Also, the person tends to have a relative stable activity exercise during the weekdays and have relatively more activity exercise on Fridays. 
 
 ##Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
 
+
+```{r}
+accel_df_new %>% 
+  group_by(week, day) %>% 
+  ggplot(aes(x = day, y = total_activity_per_day, colour = day)) + geom_point(alpha = 0.5) + geom_smooth (se = FALSE) +
+    labs( title = "Daily Activity Plot",
+      x = "Day of the week",
+      y = "Daily activity count"
+    )
+```
 
 
 
