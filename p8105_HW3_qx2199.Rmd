@@ -100,7 +100,7 @@ instacart %>%
 ##Load, tidy, and otherwise wrangle the accelerometers data
 
 ```{r}
-accel_tidy = read.csv('./accel_data.csv') %>% 
+accel_df = read.csv('./accel_data.csv') %>% 
   janitor::clean_names() %>% 
   pivot_longer(
     activity_1:activity_1440,
@@ -108,23 +108,28 @@ accel_tidy = read.csv('./accel_data.csv') %>%
     names_prefix = "activity.",
     values_to = "activity_counts"
   ) %>% 
-mutate(day = factor (day, levels = c ("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"))) %>%
-mutate(day_type = case_when(
+mutate(day = factor (day, levels = c ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")))%>%
+
+  mutate(day_type = case_when(
       day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") ~ "weekday",
       day %in% c("Saturday", "Sunday")~ "weekend")) %>%
-select(-day_id) %>%
+
+  mutate(minute = as.numeric(minute)) %>%
+arrange(week,day)
 ```
+##data discription:
+The tidy accelerometers dataset include `r ncol(accel_df)` variables and `r nrow(accel_df)` rows.The variable names are 'week', 'day','minute','activity counts' 'day id' and 'day type'.
 
-The resulting dataset `accel_df` include `r nrow(accel_df)` observations and `r ncol(accel_df)` variables.
 
-The variables in this dataset are factor variables `day` indicating the day of the week, and `weekday_vs_weekend` indicating whether the day is weekday or weekend, and numeric variables `week` identifying the week, `day_id` identifying the day, `minute` identifying the minute of the 24-hour day starting at midnight, and `activity_count` indicating the activity count for each minute.
-
-Using the tidied dataset, aggregate across minutes to create a total activity variable for each day, and create a table showing these totals.
+##Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals.
 
 ```{r}
-accel_df %>% 
-  group_by(day_id) %>% 
-  summarize(total_activity_day = sum(activity_count))
+ 
+accel_df_new = accel_df %>% 
+  group_by(week, day) %>% 
+  summarise(total_activity_per_day = sum(activity_counts)) %>% 
+  arrange(week, day) %>% 
+
 ```
 
 There is no apparent trend in the table.
@@ -146,3 +151,23 @@ accel_df %>%
 ```
 
 Based on the resulting graph, we can see that the daily activity counts for Tuesdays and Wednesdays are less variant, compared to the daily activity counts for other days. This may indicate that the activity level of the male on Tuesdays and Wednesdays is more stable than on other days.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
