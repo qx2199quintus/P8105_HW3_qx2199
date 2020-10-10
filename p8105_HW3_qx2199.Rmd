@@ -129,28 +129,16 @@ accel_df_new = accel_df %>%
   group_by(week, day) %>% 
   summarise(total_activity_per_day = sum(activity_counts)) %>% 
   arrange(week, day) %>% 
-
+pivot_wider(
+  names_from = day,
+  values_from = total_activity_per_day
+)
 ```
 
-There is no apparent trend in the table.
+*The person tends to be less active on the Saturday in week 4 and week 5. Alos, the person tends to have a relative stable activity exercise during the weendays but a relatevely higher activity exercise  on Fridays. 
 
-Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week.
+##Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
 
-```{r}
-accel_df %>% 
-  group_by(week, day) %>% 
-  summarize(total_activity_day = sum(activity_count)) %>% 
-  mutate(day = forcats::fct_relevel(day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))) %>% 
-  ggplot(aes(x = day, y = total_activity_day, color = day)) + 
-    geom_point() + 
-    labs(
-      title = "Daily Activity Plot",
-      x = "Day of the week",
-      y = "Daily activity count"
-    )
-```
-
-Based on the resulting graph, we can see that the daily activity counts for Tuesdays and Wednesdays are less variant, compared to the daily activity counts for other days. This may indicate that the activity level of the male on Tuesdays and Wednesdays is more stable than on other days.
 
 
 
