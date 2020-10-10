@@ -157,7 +157,17 @@ on Fridays and more activities on Friday evening compared with other weekdays.Al
 ```{r}
 data("ny_noaa")
 noaa_df = ny_noaa %>% 
-  
+janitor::clean_names() %>%  
+separate(date, into=c("year", "month", "day"), sep = "-", convert = TRUE) %>% 
+mutate(year = as.integer(year),
+     month = as.integer(month),
+     day = as.integer(day)) %>%
+mutate(tmax = as.numeric(tmax),
+         tmin = as.numeric(tmin)
+         ) %>%
+mutate(month = month.name[month]) %>%
+mutate(tmax = tmax/10,tmin = tmin/10,prcp = prcp/10) 
+   
 ```
 
 
