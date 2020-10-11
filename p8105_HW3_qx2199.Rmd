@@ -125,7 +125,6 @@ The tidy accelerometers dataset include `r ncol(accel_df)` variables and `r nrow
 Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals.
 
 ```{r}
- 
 accel_df_new = accel_df %>% 
   group_by(week, day) %>% 
   summarise(total_activity_per_day = sum(activity_counts)) %>% 
@@ -133,9 +132,7 @@ accel_df_new = accel_df %>%
 pivot_wider(
   names_from = day,
   values_from = total_activity_per_day
-) %>% 
- knitr::kable
-accel_df_new 
+)  
 ```
 The person tends to have a relative stable activities during the weekdays, especially on Tuesdays and Wednesdays.Also, the person has relatively more activities on Fridays. 
 
