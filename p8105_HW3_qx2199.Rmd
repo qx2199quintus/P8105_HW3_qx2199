@@ -9,6 +9,7 @@ output: github_document
 ```{r setup, include = FALSE}
 library(tidyverse)
 library(p8105.datasets)
+library(patchwork)
 knitr::opts_chunk$set(
 	fig.width = 6, 
   fig.asp = .6,
@@ -75,11 +76,11 @@ instacart %>%
   knitr::kable()
 ```
 
-*The top 3 items in baking ingredients aisle are "Light Brown Sugar", "Pure Baking Soda", and "Cane Sugar".
+The top 3 items in baking ingredients aisle are "Light Brown Sugar", "Pure Baking Soda", and "Cane Sugar".
 
-*The top 3 items in dog food care aisle are "Snack Sticks Chicken & Rice Recipe Dog Treats", "Organix Chicken & Brown Rice Recipe", and "Small Dog Biscuits".
+The top 3 items in dog food care aisle are "Snack Sticks Chicken & Rice Recipe Dog Treats", "Organix Chicken & Brown Rice Recipe", and "Small Dog Biscuits".
 
-*The top 3 items in packaged vegetables fruits aisle are "Organic Baby Spinach", "Organic Raspberries", and "Organic Blueberries".
+The top 3 items in packaged vegetables fruits aisle are "Organic Baby Spinach", "Organic Raspberries", and "Organic Blueberries".
 
 Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format the table as a 2 x 7 table.
 
@@ -132,26 +133,33 @@ accel_df_new = accel_df %>%
 pivot_wider(
   names_from = day,
   values_from = total_activity_per_day
-)
+) %>% 
+ knitr::kable
+accel_df_new 
 ```
-
-The person tends to be less active on the Saturday in week 4 and week 5. Also, the person tends to have a relative stable activities during the weekdays and have relatively more activities on Fridays. 
+The person tends to have a relative stable activities during the weekdays, especially on Tuesdays and Wednesdays.Also, the person has relatively more activities on Fridays. 
 
 Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
 
 
 ```{r}
+
 accel_df %>% 
-  group_by (week, day) %>% 
-  summarise(total_activity_per_day = sum(activity_counts))%>% 
-  ggplot(aes(x = day, y = total_activity_per_day, colour = day)) + geom_point(alpha = 0.7) +
+    mutate(
+    hour = ceiling(minute/60)
+  ) %>% 
+  group_by (hour, day_id) %>% 
+  mutate(mean_activity_counts = mean(activity_counts)) %>% 
+  ggplot(aes(x = hour, y = mean_activity_counts, colour = day, group = day_id)) + geom_point(alpha= 0.3) +geom_line(alpha=0.5)+
     labs( title = "Activity time for each day ",
-      x = "Day of the week",
-      y = "Total activity count per day"
+      x = "24-Hours activity time",
+      y = "Daily activity counts"
     )
+
 ```
-From the graph we could see that the person have relatively more activities
-on Fridays and more activities on Friday evening compared with other weekdays.Also, the person has a stable activity habit during Weekdays, and mainly during the daytime.During weekends,especially for Sunday, the person has activities during the day, mid-day and night. 
+From the graph we could see that the person have relatively more activities on Fridays and more 
+activities on the evening of Friday. On Sundays the person are more likely to take exercise from 10am to 1 pm.
+Also, the the peak for activities are mainly from 6am to 1pm,and from 7pm to 10 pm. The person has relativly less activity at around 3 pm.
 
 ##Problem 3
 
@@ -172,8 +180,8 @@ mutate(month = month.name[month]) %>%
 mutate(tmax = tmax/10,tmin = tmin/10,prcp = prcp/10) 
    
 ```
-Discription of the dataset: The 'noaa_df' dataset has  `r nrow(noaa_df)` rows and `r ncol(noaa_df)` columns. 
-The variable names are 'id', 'year' 'month' 'day','prcp','snow','snwd','tmax' and'tmin', which provides us information about the snow,precipitation, and temperature of days in different months and in different years. 
+Discription of the dataset: The `noaa_df` dataset has  `r nrow(noaa_df)` rows and `r ncol(noaa_df)` columns. 
+The variable names are `id`for  weather station ID , `year` for observation year, `month` for observation month  `day`for observation day, `prcp`for precipitation（the value needs to be devided by ten when transfer to mm scale),`snow`for snowfall in mm,`snwd`for snow depth in mm,`tmax`for maximum temperature (the value needs to be devided by ten in Celsius scale), and`tmin`for minimum temperature (the value needs to be devided by ten in Celsius scale)
 
 For snowfall, the most commonly observed values are:
 
@@ -182,7 +190,7 @@ noaa_df %>%
 count(snow) %>%
 arrange(desc(n))
 ```
- AS we can see, the the most commonly observed values for snowfall are 0.I think this is because in the most time of the year, there are no snowfalls. 
+ As we can see, the the most commonly observed values for snowfall are 0.I think this is because in the most time of the year, there are no snowfalls. 
  
 Make a two-panel plot showing the average max temperature in January and in July in each station across years. 
 
@@ -219,7 +227,7 @@ tmax_vs_tmin =
       x = "Minimum daily temperature (C)",
       y = "Maximum daily temperature (C)" )
 
-snow_distri =
+snow_distri  =
   noaa_df %>% 
   filter(snow < 100 , snow > 0) %>%
   mutate(year = as.factor(year)) %>%
@@ -232,7 +240,7 @@ snow_distri =
     )+
   theme(axis.text.x = element_text(angle = 90), legend.position="none")
 
-  tmax_vs_tmin / snow_distri
+tmax_vs_tmin / snow_distri
 
 ```
 
