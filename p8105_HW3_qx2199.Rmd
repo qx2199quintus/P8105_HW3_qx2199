@@ -189,18 +189,26 @@ Make a two-panel plot showing the average max temperature in January and in July
 ```{r}
 noaa_df %>% 
   filter(month == c("January", "July")) %>% 
-  group_by(id, year, month) %>% 
-  summarize(tmax_mean = mean(tmax, na.rm = TRUE)) %>% 
-  ggplot(aes(x = year, y = tmax_mean, group = id))+
-  geom_point(alpha = 0.5) +
-  geom_line(alpha = 0.5) +
-  facet_grid(. ~ month) +
-  labs(
-    title = "Average max temperature in Jan and July across years",
+  group_by(id, year, month) %>%
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE)) %>%
+  ggplot(aes(x = year, y = mean_tmax, color = month)) + 
+  geom_point(alpha = 0.3) +  geom_line(alpha = 0.5) +
+  facet_grid(~month) +
+  theme(legend.position="none") +
+  scale_color_manual(values=c("blue", "green")) + labs(
+    title = "Average max temperature in January and July across years",
     x = "Year",
-    y = "Average max tempreture(C)",
-   )
+    y = "Average max temperature (C)"
+    ) 
 ```
+
+As we can see, the average max temperature in Janurary is lower than that in July , and the temperature in both months fluctuates each year. 
+In January the max average tempreature are mainly fluctuate  around 0 (Celsius), in July the max average tempreature are mainly fluctuate  around 27 (Celsius).
+The max mean temperatures in Januraries are more fluctuable than the max mean temperature in Julys, 
+There are outlier in the two graphs. In January, there is a high outlier which is about 13 (Celsius). In July, there are two low outliers, one is around 13(Celsius) and another is around 17(Celsius).
+
+
 
 
 
