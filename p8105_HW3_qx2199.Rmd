@@ -208,8 +208,36 @@ In January the max average tempreature are mainly fluctuate  around 0 (Celsius),
 The max mean temperatures in Januraries are more fluctuable than the max mean temperature in Julys, 
 There are outlier in the two graphs. In January, there is a high outlier which is about 13 (Celsius). In July, there are two low outliers, one is around 13(Celsius) and another is around 17(Celsius).
 
+Make a two-panel plot showing (i) tmax vs tmin for the full dataset 
+```{r}
+tmax_vs_tmin_pic =
+noaa_df %>% 
+  ggplot(aes(x = tmin, y = tmax))+
+    geom_smooth(se = FALSE) +
+    labs(
+      title = "tmax vs tmin plot",
+      x = "Minimum daily temperature (C)",
+      y = "Maximum daily temperature (C)"
+    )
+```
 
-
+```{r}
+snow_distri_pic=
+noaa_df %>% 
+  filter(snow < 100 , snow > 0) %>%
+  mutate(year = factor(year)) %>%
+  ggplot(aes(x = year, y = snow)) + 
+  geom_violin(aes(fill = year), alpha = 0.3 )+
+  labs(
+      title = "Distribution of the snowfall plot",
+      x = "Year",
+      y = "Snowfall"
+    )
+  theme(axis.text.x = element_text(angle = 90),
+        legend.position="none") %>%
+  
+  tmax_vs_tmin_pic / snow_distri_pic
+```
 
 
 
