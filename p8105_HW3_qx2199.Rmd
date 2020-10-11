@@ -210,33 +210,30 @@ There are outlier in the two graphs. In January, there is a high outlier which i
 
 Make a two-panel plot showing (i) tmax vs tmin for the full dataset 
 ```{r}
-tmax_vs_tmin_pic =
-noaa_df %>% 
+tmax_vs_tmin =
+  noaa_df %>% 
   ggplot(aes(x = tmin, y = tmax))+
     geom_smooth(se = FALSE) +
     labs(
       title = "tmax vs tmin plot",
       x = "Minimum daily temperature (C)",
-      y = "Maximum daily temperature (C)"
-    )
-```
+      y = "Maximum daily temperature (C)" )
 
-```{r}
-snow_distri_pic=
-noaa_df %>% 
+snow_distri =
+  noaa_df %>% 
   filter(snow < 100 , snow > 0) %>%
-  mutate(year = factor(year)) %>%
+  mutate(year = as.factor(year)) %>%
   ggplot(aes(x = year, y = snow)) + 
   geom_violin(aes(fill = year), alpha = 0.3 )+
   labs(
       title = "Distribution of the snowfall plot",
       x = "Year",
       y = "Snowfall"
-    )
-  theme(axis.text.x = element_text(angle = 90),
-        legend.position="none") %>%
-  
-  tmax_vs_tmin_pic / snow_distri_pic
+    )+
+  theme(axis.text.x = element_text(angle = 90), legend.position="none")
+
+  tmax_vs_tmin / snow_distri
+
 ```
 
 
