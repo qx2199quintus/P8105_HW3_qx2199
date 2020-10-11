@@ -119,7 +119,7 @@ mutate(day = factor (day, levels = c ("Monday","Tuesday","Wednesday","Thursday",
 arrange(week,day)
 ```
 data discription:
-The tidy accelerometers dataset include `r ncol(accel_df)` variables and `r nrow(accel_df)` rows.The variable names are 'week', 'day','minute','activity counts' 'day id' and 'day type'.
+The tidy accelerometers dataset include `r ncol(accel_df)` variables and `r nrow(accel_df)` rows.The variable names are `week`, `day`,`minute`,`activity counts`, `day id` and `day type`.
 
 
 Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals.
@@ -132,7 +132,7 @@ accel_df_new = accel_df %>%
 pivot_wider(
   names_from = day,
   values_from = total_activity_per_day
-)  
+) 
 ```
 The person tends to have a relative stable activities during the weekdays, especially on Tuesdays and Wednesdays.Also, the person has relatively more activities on Fridays. 
 
